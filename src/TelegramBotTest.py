@@ -36,7 +36,7 @@ def action(msg):
         print("\n\nDispositivo terminando programa...")
 
     else: #Comando invalido
-        message = ("\nIntroduzca: "
+        message = ("\nIntroduzca (en minuscula): "
         "\n\t\"si\" - para permitir conexion "
         "\n\t\"no\" - para negar conexion "
         "\n\t\"stop\" - para apagar programa "

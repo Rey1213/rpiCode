@@ -38,12 +38,17 @@ def action(msg):
         message = "Raspberry no ha solicitado conexion. Aprete el boton en Raspberry."
 
     elif 'si' in command: #Dispositivo acepto conexion
-        if(GPIO.output(green)==False):
-            GPIO.output(green,True) # Prende LED verde
         message = "Conectado al Raspberry Pi :D"
         print("\n\nDispositivo conectado :D")
+
+        if(GPIO.output(green)==False):
+            GPIO.output(green,True) # Prende LED verde
+        
         
     elif 'no' in command: #Dispositivo nego conexion
+        message = "Usted nego la conexion"
+        print("\n\nDispositivo nego conexion :(")
+
         for x in range(0, 3): # 0,1,2 / 3 veces
             if(GPIO.output(green)==True):
                 GPIO.output(green,False) # Apaga LED verde
@@ -58,8 +63,6 @@ def action(msg):
                 GPIO.output(green,False) # Apaga LED verde
                 sleep(1) # Pausa de 1 seg
             
-        message = "Usted nego la conexion"
-        print("\n\nDispositivo nego conexion :(")
 
     elif 'stop' in command: #Terminar programa
         stop = 1
@@ -74,6 +77,7 @@ def action(msg):
             else:
                 GPIO.output(green,True) # Prende LED verde
                 GPIO.output(green,False) # Apaga LED verde
+
     else: #Comando invalido
         message = ("\nIntroduzca (en minuscula): "
         "\n\t\"si\" - para permitir conexion "
