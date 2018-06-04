@@ -35,7 +35,7 @@ def action(msg):
     print('\n\nComando recibido: %s' %command)
 
     if on==0: #Boton no ha sido presionado en Raspberry
-        message = "Raspberry no ha solicitado conexion. Aprete el boton."
+        message = "Raspberry no ha solicitado conexion. Aprete el boton en Raspberry."
 
     elif 'si' in command: #Dispositivo acepto conexion
         GPIO.output(green,True) # Prende LED verde
@@ -115,7 +115,7 @@ if(stop == 0):
     message = "no_reply" #Para revisar si dispositivo responde
     
     print("Esperando respuesta de dispositivo")
-    MessageLoop(telegram_bot, action).run_as_thread #Esperar mensaje de dispositivo en background
+    MessageLoop(telegram_bot, action).run_as_thread() #Esperar mensaje de dispositivo en background
     
     sleep(10)
 

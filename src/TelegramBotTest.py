@@ -57,10 +57,10 @@ telegram_id = 123456789 # id de usuario Telegram (Pon el tuyo)
 telegram_bot = telepot.Bot('Aqui va token de Telegram bot') #HTTP API para Telegram Bot
 
 sleep(1)
-if(telegram_bot.getMe is None):
+if(telegram_bot.getMe is None): #Si bot no se pudo solicitar
     stop = 1
     print("Error con bot")
-else:
+else: #Bot solicitado exitosamente
     print(telegram_bot.getMe()) #Enseñar info de bot
     sleep(1)
 
@@ -76,7 +76,7 @@ if(stop == 0):
     message = "no_reply" #Para revisar si dispositivo responde
     
     print("Esperando respuesta de dispositivo")
-    MessageLoop(telegram_bot, action).run_as_thread #Esperar mensaje de dispositivo en background
+    MessageLoop(telegram_bot, action).run_as_thread() #Esperar mensaje de dispositivo en background
     
     sleep(10)
 
