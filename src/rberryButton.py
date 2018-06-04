@@ -49,6 +49,7 @@ def action(msg):
             GPIO.output(green,False) # Apaga LED verde
             sleep(1) # Pausa de 1 seg
         
+        message = "Usted nego la conexion"
         print("\n\nDispositivo nego conexion :(")
 
     elif 'stop' in command: #Terminar programa
