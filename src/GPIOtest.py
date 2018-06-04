@@ -31,16 +31,20 @@ while(on==0): #Mientras boton no ha sido presionado
 
 print("\n\nPrendiendo LED Verde\n\n")
 sleep(2)
-GPIO.output(green,True) # Prende LED verde
+if(GPIO.output(green)==False):
+    GPIO.output(green,True) # Prende LED verde
 print("\n\nLED Verde prendido :D\n\n")
 
 print("\n\nApagando LED Verde\n\n")
 sleep(3)
-for x in range(0, 3): # 0,1,2 / 3 veces
-    GPIO.output(green,True) # Prende LED verde
-    sleep(1) # Pausa de 1 seg
-    GPIO.output(green,False) # Apaga LED verde
-    sleep(1) # Pausa de 1 seg
+if(on==1):
+    for x in range(0, 2): # 0,1 / 2 veces
+        GPIO.output(green,False) # Apaga LED verde
+        sleep(1) # Pausa de 1 seg
+        GPIO.output(green,True) # Prende LED verde
+        sleep(1) # Pausa de 1 seg
+        GPIO.output(green,False) # Apaga LED verde
+        sleep(1) # Pausa de 1 seg
 
 GPIO.cleanup() #Limpia puertos GPIO
 print("\n\nPrograma terminado")
