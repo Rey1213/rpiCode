@@ -93,7 +93,7 @@ while(on==0): #Mientras boton no ha sido presionado
         telegram_bot = telepot.Bot('Aqui va token de Telegram bot') #HTTP API para Telegram Bot
         
         sleep(1)
-        if(telegram_bot.getMe is None):
+        if(telegram_bot.getMe() is None):
             stop = 1
             print("Error con bot")
         else:

@@ -57,7 +57,7 @@ telegram_id = 123456789 # id de usuario Telegram (Pon el tuyo)
 telegram_bot = telepot.Bot('Aqui va token de Telegram bot') #HTTP API para Telegram Bot
 
 sleep(1)
-if(telegram_bot.getMe is None): #Si bot no se pudo solicitar
+if(telegram_bot.getMe() is None): #Si bot no se pudo solicitar
     stop = 1
     print("Error con bot")
 else: #Bot solicitado exitosamente
