@@ -29,7 +29,7 @@ message = "no_reply" #no hubo respuesta del dispositivo
 
 #------------- ACCIONES DE TELEGRAM BOT --------------------
 def action(msg):
-    global message, stop
+    global message, reply, stop
 
     #La "direccion" donde el Telegram bot responde
     chat_id = msg['chat']['id'] #Para que bot pueda responder
@@ -39,49 +39,58 @@ def action(msg):
     if on==0: #Boton no ha sido presionado en Raspberry
         message = "\n\nRaspberry no ha solicitado conexion. Aprete el boton en Raspberry."
 
-    elif 'si' in command: #Dispositivo acepto conexion
+    elif ('si' in command and reply==0 and stop==0): #Dispositivo acepto conexion
+        reply = 1
         message = "Conectado al Raspberry Pi :D"
         print("\n\nDispositivo conectado :D")
 
-        if(GPIO.output(green,False)):
-            GPIO.output(green,True) # Prende LED verde
+        GPIO.output(green,True) # Prende LED verde
              
-    elif 'no' in command: #Dispositivo nego conexion
+    elif ('no' in command and reply==0 and stop==0): #Dispositivo nego conexion
+        stop = 1
         message = "Usted nego la conexion"
         print("\n\nDispositivo nego conexion :(")
 
-        for x in range(0, 3): # 0,1,2 / 3 veces
+        for x in range(0, 10): # 0,1,2..,9 / 10 veces
             if(GPIO.output(green,True)):
                 GPIO.output(green,False) # Apaga LED verde
-                sleep(1) # Pausa de 1 seg
+                sleep(.3) # Pausa
                 GPIO.output(green,True) # Prende LED verde
-                sleep(1) # Pausa de 1 seg
+                sleep(.3) # Pausa
                 GPIO.output(green,False) # Apaga LED verde
-                sleep(1) # Pausa de 1 seg
+                sleep(.3) # Pausa
             else:
                 GPIO.output(green,True) # Prende LED verde
-                sleep(1) # Pausa de 1 seg
+                sleep(.3) # Pausa
                 GPIO.output(green,False) # Apaga LED verde
-                sleep(1) # Pausa de 1 seg
+                sleep(.3) # Pausa
             
     elif 'stop' in command: #Terminar programa
         stop = 1
         message = "Usted termino el programa"
         print("\n\nDispositivo terminando programa...")
 
-        for x in range(0, 3): # 0,1,2 / 3 veces
+        for x in range(0, 5): # 0,1,2,3,4 / 5 veces
             if(GPIO.output(green,True)):
                 GPIO.output(green,False) # Apaga LED verde
+                sleep(1) #Pausa programa
                 GPIO.output(green,True) # Prende LED verde
+                sleep(1) #Pausa programa
                 GPIO.output(green,False) # Apaga LED verde
+                sleep(1) #Pausa programa
             else:
                 GPIO.output(green,True) # Prende LED verde
+                sleep(1) #Pausa programa
                 GPIO.output(green,False) # Apaga LED verde
+                sleep(1) #Pausa programa
 
-    else: #Comando invalido
+    elif (reply==0 and stop==0): #Comando invalido
         message = ("\nIntroduzca (en minuscula): "
         "\n\t\"si\" - para permitir conexion "
         "\n\t\"no\" - para negar conexion "
+        "\n\n")
+    else: #Comando invalido despues de conexion
+        message = ("\nIntroduzca (en minuscula): "
         "\n\t\"stop\" - para apagar programa "
         "\n\n")
     
@@ -108,10 +117,10 @@ try: #Por si acaso hay exceptio
         os.system('clear') #Limpiar pantalla
 
         #telegram_id = input("Introduzca ID de Telegram del Dispositivo: ") # Introducir id de usuario Telegram
-        telegram_id = 123456789 # id de usuario Telegram (Pon el tuyo)
+        telegram_id =  # id de usuario Telegram (Pon el tuyo)
 
         #telegram_bot = sys.argv[1] #Para adquerir bot token del terminal como argumento
-        telegram_bot = telepot.Bot('Aqui va token de Telegram bot') #HTTP API para Telegram Bot
+        telegram_bot = telepot.Bot('Tu Telegram Bot API key') #HTTP API para Telegram Bot
 
         if(telegram_bot.getMe() is None): #Si error con Telegram Bot
             print("\n\n * *Error con bot* *\n\n")
@@ -136,7 +145,12 @@ try: #Por si acaso hay exceptio
             print("Esperando respuesta de dispositivo")
             MessageLoop(telegram_bot, action).run_as_thread() #Esperar mensaje de dispositivo en background
             
-            sleep(10) #Pausa hasta que se acaba Tiempo de Espera
+            #Pausa hasta que se acaba Tiempo de Espera
+            sleep(5) #Pausa 5 seg
+            i=1
+            while(reply==0 and stop==0 and i<=10): #Total pausa de 55 seg
+                sleep(i) # 1+2+3+4+5+6+7+8+9+10 = 55 seg
+                ++i
 
             #Timeout
             if(message == "no_reply"): #Si dispositivo no respondio despues de 10 segundos
@@ -147,7 +161,8 @@ try: #Por si acaso hay exceptio
                     #haz algo
                     sleep(10)
 
-    print("\n\nPrograma terminado")   
+    sleep(7)
+    print("\n\nPrograma terminado")
 
 except: #Hubo excepcion
     print("\n\n * *Hubo excepcion* *\n\n")
